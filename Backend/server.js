@@ -8,6 +8,7 @@ require("dotenv").config();
 
 // middleware
 app.use(cors());
+app.use(express.json());
 
 // routes
 readdirSync("./routes/").map((f) => app.use("/", require("./routes/" + f)));
