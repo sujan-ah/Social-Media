@@ -1,4 +1,8 @@
-const { validationemail, validateLength } = require("../helpers/validation.js");
+const {
+  validationEmail,
+  validateLength,
+  validateUsername,
+} = require("../helpers/validation.js");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel.js");
 
@@ -7,7 +11,6 @@ exports.register = async (req, res) => {
     const {
       first_name,
       last_name,
-      username,
       email,
       password,
       bYear,
@@ -17,7 +20,7 @@ exports.register = async (req, res) => {
     } = req.body;
 
     // email validation
-    if (!validationemail(email)) {
+    if (!validationEmail(email)) {
       return res.status(400).json({ message: "Invalid email address" });
     }
 
@@ -35,32 +38,34 @@ exports.register = async (req, res) => {
     if (!validateLength(first_name, 3, 30)) {
       return res
         .status(400)
-        .json({ messagae: "First name must between 3 and 30 character" });
+        .json({ messagae: "First name must be between 3 and 30 character" });
     }
 
     if (!validateLength(last_name, 3, 30)) {
       return res
         .status(400)
-        .json({ messagae: "Last name must between 3 and 30 character" });
+        .json({ messagae: "Last name must be between 3 and 30 character" });
     }
 
     if (!validateLength(password, 3, 30)) {
       return res
         .status(400)
-        .json({ messagae: "Password must atleast 6 character" });
+        .json({ messagae: "Password must be atleast 6 character" });
     }
 
+    // password cryption
     const cryptedPassword = await bcrypt.hash(password, 12);
-    console.log(cryptedPassword);
 
-    return;
+    // unique user name generation
+    const tempUserName = first_name + last_name;
+    const newUserName = await validateUsername(tempUserName);
 
     const user = await new User({
       first_name,
       last_name,
-      username,
+      username: newUserName,
       email,
-      password,
+      password: cryptedPassword,
       bYear,
       bMonth,
       bDay,
