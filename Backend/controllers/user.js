@@ -5,6 +5,7 @@ const {
 } = require("../helpers/validation.js");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel.js");
+const { generateToken } = require("../helpers/tokens.js");
 
 exports.register = async (req, res) => {
   try {
@@ -71,6 +72,9 @@ exports.register = async (req, res) => {
       bDay,
       gender,
     }).save();
+
+    const emailVerification = generateToken({ id: user._id }, "30m");
+    console.log(emailVerification);
 
     res.json(user);
   } catch (error) {
