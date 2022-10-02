@@ -1,12 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { RiEyeCloseFill, RiEyeFill } from "react-icons/ri";
 
 const Login = () => {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [emailErr, setEmailErr] = useState("");
   let [passwordErr, setpasswordErr] = useState("");
+  let [passwordShow, setpasswordShow] = useState(false);
 
   let handleEmail = (e) => {
     setEmail(e.target.value);
@@ -45,6 +47,10 @@ const Login = () => {
     }
   };
 
+  let handlePasswordShow = () => {
+    setpasswordShow(!passwordShow);
+  };
+
   return (
     <div className="max-w-logincontainer mx-auto md:flex justify-between text-center md:text-start px-2.5 lg:px-0 ">
       <div className="md:w-[350px] md:mt-40">
@@ -71,12 +77,25 @@ const Login = () => {
             </p>
           )}
 
-          <input
-            onChange={handlePassword}
-            className="w-full border border-solid border-bordercolor px-2.5 py-2.5 mt-4 rounded-md"
-            type="password"
-            placeholder="Password"
-          />
+          <div className="relative">
+            <input
+              onChange={handlePassword}
+              className="w-full border border-solid border-bordercolor px-2.5 py-2.5 mt-4 rounded-md"
+              type={passwordShow ? "text" : "password"}
+              placeholder="Password"
+            />
+            {passwordShow ? (
+              <RiEyeFill
+                onClick={handlePasswordShow}
+                className="absolute top-8	 right-3.5"
+              />
+            ) : (
+              <RiEyeCloseFill
+                onClick={handlePasswordShow}
+                className="absolute top-8	 right-3.5"
+              />
+            )}
+          </div>
 
           {passwordErr && (
             <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5">
