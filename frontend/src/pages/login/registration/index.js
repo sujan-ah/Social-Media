@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { RiEyeCloseFill, RiEyeFill } from "react-icons/ri";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Registration = () => {
   let [firstname, setFirstname] = useState("");
@@ -146,6 +147,61 @@ const Registration = () => {
               {passwordErr}
             </p>
           )}
+
+          <p className="font-pop font-regular text-base mt-3 mb-3">
+            Date of birth:
+          </p>
+          <div className="flex gap-x-5">
+            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
+              <p className="font-pop font-regular text-base">29</p>
+              <IoIosArrowDown className="absolute top-3 right-3.5" />
+            </div>
+            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
+              <p className="font-pop font-regular text-base">Feb</p>
+              <IoIosArrowDown className="absolute top-3 right-3.5" />
+            </div>
+            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
+              <p className="font-pop font-regular text-base">2022</p>
+              <IoIosArrowDown className="absolute top-3 right-3.5" />
+            </div>
+          </div>
+
+          <p className="font-pop font-regular text-base mt-3 mb-3">
+            Date of birth:
+          </p>
+          <div className="flex gap-x-5 mb-5 relative">
+            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
+              <p className="font-pop font-regular text-base">Male</p>
+              <div>
+                <input
+                  type="radio"
+                  name="gender"
+                  className="absolute top-4 right-3.5"
+                />
+              </div>
+            </div>
+
+            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
+              <p className="font-pop font-regular text-base ">Female</p>
+              <div>
+                <input
+                  type="radio"
+                  name="gender"
+                  className="absolute top-4 right-3.5"
+                />
+              </div>
+            </div>
+            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
+              <p className="font-pop font-regular text-base">Custom</p>
+              <div>
+                <input
+                  type="radio"
+                  name="gender"
+                  className="absolute top-4 right-3.5"
+                />
+              </div>
+            </div>
+          </div>
 
           <button
             onClick={handleLogin}
