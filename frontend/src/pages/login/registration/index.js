@@ -8,12 +8,23 @@ const Registration = () => {
   let [firstnameErr, setFirstnameErr] = useState("");
   let [lastname, setLastname] = useState("");
   let [lastnameErr, setlastnameErr] = useState("");
-
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
+  let [year, setYear] = useState(new Date().getFullYear());
+  let [byear, setByear] = useState("");
+  let [bmonth, setBmonth] = useState("");
+  let [bday, setBday] = useState("");
+  let [gender, setGender] = useState("");
+
+  let [male, setMale] = useState("");
+  let [female, setFemale] = useState("");
+  let [custom, setCustom] = useState("");
+
   let [emailErr, setEmailErr] = useState("");
   let [passwordErr, setpasswordErr] = useState("");
   let [passwordShow, setpasswordShow] = useState(false);
+  let [dateofbirthErr, setDateofbirthErr] = useState("");
+  let [genderErr, setgenderErr] = useState("");
 
   let handleFirstName = (e) => {
     setFirstname(e.target.value);
@@ -35,6 +46,34 @@ const Registration = () => {
     setpasswordErr("");
   };
 
+  let handlePasswordShow = () => {
+    setpasswordShow(!passwordShow);
+  };
+
+  let handleYear = (e) => {
+    setByear(e.target.value);
+  };
+
+  let handleMonth = (e) => {
+    setBmonth(e.target.value);
+  };
+
+  let handelDays = (e) => {
+    setBday(e.target.value);
+  };
+
+  let handleMale = (e) => {
+    setMale(e.target.value);
+  };
+
+  let handleFemale = (e) => {
+    setFemale(e.target.value);
+  };
+
+  let handleCustom = (e) => {
+    setCustom(e.target.value);
+  };
+
   let handleLogin = () => {
     if (!firstname) {
       setFirstnameErr("First Name is required");
@@ -53,6 +92,7 @@ const Registration = () => {
         setEmailErr("Valid Email is required");
       }
     }
+
     if (!password) {
       setpasswordErr("Password is required");
     } else if (!password.match(/^(?=.*[a-z])/)) {
@@ -66,11 +106,31 @@ const Registration = () => {
     } else if (!password.match(/^(?=.{8,})/)) {
       setpasswordErr("Password must be atleast 8 character ");
     }
+
+    if (!bday) {
+      setDateofbirthErr("Please choose a day");
+    } else if (!bmonth) {
+      setDateofbirthErr("Please give a month");
+    } else if (!byear) {
+      setDateofbirthErr("Please give a year");
+    } else if (byear) {
+      if (new Date().getFullYear() - byear < 18) {
+        setDateofbirthErr("Your age must be greater than or equel 18");
+      } else {
+        setDateofbirthErr("");
+      }
+    }
+
+    if (!male && !female && !custom) {
+      setgenderErr("Please choose a gender");
+    } else {
+      setgenderErr("");
+    }
   };
 
-  let handlePasswordShow = () => {
-    setpasswordShow(!passwordShow);
-  };
+  const years = Array.from(new Array(60), (val, index) => year - index);
+  const months = Array.from(new Array(12), (val, index) => 1 + index);
+  const days = Array.from(new Array(31), (val, index) => 1 + index);
 
   return (
     <div className="max-w-logincontainer mx-auto md:flex justify-between text-center md:text-start px-2.5 lg:px-0 ">
@@ -152,23 +212,70 @@ const Registration = () => {
             Date of birth:
           </p>
           <div className="flex gap-x-5">
-            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
-              <p className="font-pop font-regular text-base">29</p>
+            <div className="relative">
+              <select
+                onClick={handelDays}
+                className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md appearance-none	"
+              >
+                <option>Day</option>
+                {days.map((item, index) => (
+                  <option value={item} key={index}>
+                    {item}
+                  </option>
+                ))}
+              </select>
               <IoIosArrowDown className="absolute top-3 right-3.5" />
             </div>
-            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
-              <p className="font-pop font-regular text-base">Feb</p>
+
+            <div className="relative">
+              <select
+                onChange={handleMonth}
+                className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md appearance-none	"
+              >
+                <option>Month</option>
+                {months.map((item, index) => (
+                  <option value={item} key={index}>
+                    {item == 1 && "January"}
+                    {item == 2 && "February"}
+                    {item == 3 && "March"}
+                    {item == 4 && "April"}
+                    {item == 5 && "May"}
+                    {item == 6 && "June"}
+                    {item == 7 && "July"}
+                    {item == 8 && "August"}
+                    {item == 9 && "Septembar"}
+                    {item == 10 && "Octobar"}
+                    {item == 11 && "Novembar"}
+                    {item == 12 && "Decembar"}
+                  </option>
+                ))}
+              </select>
               <IoIosArrowDown className="absolute top-3 right-3.5" />
             </div>
-            <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
-              <p className="font-pop font-regular text-base">2022</p>
+
+            <div className="relative">
+              <select
+                onChange={handleYear}
+                className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md appearance-none	"
+              >
+                <option>Year</option>
+                {years.map((item, index) => (
+                  <option value={item} key={index}>
+                    {item}
+                  </option>
+                ))}
+              </select>
               <IoIosArrowDown className="absolute top-3 right-3.5" />
             </div>
           </div>
 
-          <p className="font-pop font-regular text-base mt-3 mb-3">
-            Date of birth:
-          </p>
+          {dateofbirthErr && (
+            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5">
+              {dateofbirthErr}
+            </p>
+          )}
+
+          <p className="font-pop font-regular text-base mt-3 mb-3">Gender:</p>
           <div className="flex gap-x-5 mb-5 relative">
             <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
               <p className="font-pop font-regular text-base">Male</p>
@@ -177,6 +284,7 @@ const Registration = () => {
                   type="radio"
                   name="gender"
                   className="absolute top-4 right-3.5"
+                  onChange={handleMale}
                 />
               </div>
             </div>
@@ -188,6 +296,7 @@ const Registration = () => {
                   type="radio"
                   name="gender"
                   className="absolute top-4 right-3.5"
+                  onChange={handleFemale}
                 />
               </div>
             </div>
@@ -198,10 +307,17 @@ const Registration = () => {
                   type="radio"
                   name="gender"
                   className="absolute top-4 right-3.5"
+                  onChange={handleCustom}
                 />
               </div>
             </div>
           </div>
+
+          {genderErr && (
+            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5">
+              {genderErr}
+            </p>
+          )}
 
           <button
             onClick={handleLogin}
