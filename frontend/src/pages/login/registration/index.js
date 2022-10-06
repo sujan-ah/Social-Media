@@ -130,7 +130,10 @@ const Registration = () => {
 
   const years = Array.from(new Array(60), (val, index) => year - index);
   const months = Array.from(new Array(12), (val, index) => 1 + index);
-  const days = Array.from(new Array(31), (val, index) => 1 + index);
+  const days = Array.from(
+    new Array(new Date(byear, bmonth, 0).getDate()),
+    (val, index) => 1 + index
+  );
 
   return (
     <div className="max-w-logincontainer mx-auto md:flex justify-between text-center md:text-start px-2.5 lg:px-0 ">
