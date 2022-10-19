@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { RiEyeCloseFill, RiEyeFill } from "react-icons/ri";
 import { IoIosArrowDown } from "react-icons/io";
+import axios from "axios";
 
 const Registration = () => {
   let [firstname, setFirstname] = useState("");
-  let [firstnameErr, setFirstnameErr] = useState("");
   let [lastname, setLastname] = useState("");
-  let [lastnameErr, setlastnameErr] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [year, setYear] = useState(new Date().getFullYear());
@@ -15,35 +14,24 @@ const Registration = () => {
   let [bmonth, setBmonth] = useState("");
   let [bday, setBday] = useState("");
   let [gender, setGender] = useState("");
-
-  let [male, setMale] = useState("");
-  let [female, setFemale] = useState("");
-  let [custom, setCustom] = useState("");
-
-  let [emailErr, setEmailErr] = useState("");
-  let [passwordErr, setpasswordErr] = useState("");
   let [passwordShow, setpasswordShow] = useState(false);
-  let [dateofbirthErr, setDateofbirthErr] = useState("");
-  let [genderErr, setgenderErr] = useState("");
+  let [err, setErr] = useState("");
+  let [success, setSuccess] = useState("");
 
   let handleFirstName = (e) => {
     setFirstname(e.target.value);
-    setFirstnameErr("");
   };
 
   let handleLastName = (e) => {
     setLastname(e.target.value);
-    setlastnameErr("");
   };
 
   let handleEmail = (e) => {
     setEmail(e.target.value);
-    setEmailErr("");
   };
 
   let handlePassword = (e) => {
     setPassword(e.target.value);
-    setpasswordErr("");
   };
 
   let handlePasswordShow = () => {
@@ -62,69 +50,36 @@ const Registration = () => {
     setBday(e.target.value);
   };
 
-  let handleMale = (e) => {
-    setMale(e.target.value);
+  let handleGender = (gender) => {
+    setGender(gender);
   };
 
-  let handleFemale = (e) => {
-    setFemale(e.target.value);
-  };
+  let handleRegister = async () => {
+    try {
+      let { data } = await axios.post("http://localhost:8000/register", {
+        first_name: firstname,
+        last_name: lastname,
+        email: email,
+        password: password,
+        bYear: byear,
+        bMonth: bmonth,
+        bDay: bday,
+        gender: gender,
+      });
+      setErr("");
+      setSuccess(data.message);
 
-  let handleCustom = (e) => {
-    setCustom(e.target.value);
-  };
+      setFirstname("");
+      setLastname("");
+      setEmail("");
+      setPassword("");
 
-  let handleLogin = () => {
-    if (!firstname) {
-      setFirstnameErr("First Name is required");
-    }
-    if (!lastname) {
-      setlastnameErr("Last Name is required");
-    }
-    if (!email) {
-      setEmailErr("Email is required");
-    } else {
-      if (
-        !email
-          .toLowerCase()
-          .match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
-      ) {
-        setEmailErr("Valid Email is required");
-      }
-    }
-
-    if (!password) {
-      setpasswordErr("Password is required");
-    } else if (!password.match(/^(?=.*[a-z])/)) {
-      setpasswordErr("Password must contain lower case ");
-    } else if (!password.match(/^(?=.*[A-Z])/)) {
-      setpasswordErr("Password must contain upper case ");
-    } else if (!password.match(/^(?=.*[0-9])/)) {
-      setpasswordErr("Password must contain number ");
-    } else if (!password.match(/^(?=.*[!@#$%^&*])/)) {
-      setpasswordErr("Password must contain symbol ");
-    } else if (!password.match(/^(?=.{8,})/)) {
-      setpasswordErr("Password must be atleast 8 character ");
-    }
-
-    if (!bday) {
-      setDateofbirthErr("Please choose a day");
-    } else if (!bmonth) {
-      setDateofbirthErr("Please give a month");
-    } else if (!byear) {
-      setDateofbirthErr("Please give a year");
-    } else if (byear) {
-      if (new Date().getFullYear() - byear < 18) {
-        setDateofbirthErr("Your age must be greater than or equel 18");
-      } else {
-        setDateofbirthErr("");
-      }
-    }
-
-    if (!male && !female && !custom) {
-      setgenderErr("Please choose a gender");
-    } else {
-      setgenderErr("");
+      setBday("");
+      setBmonth("");
+      setByear("");
+      setGender("");
+    } catch (error) {
+      setErr(error.response.data.message);
     }
   };
 
@@ -154,36 +109,24 @@ const Registration = () => {
             className="w-full border border-solid border-bordercolor px-2.5 py-2.5 rounded-md "
             type="text"
             placeholder="First Name"
+            value={firstname}
           />
-          {firstnameErr && (
-            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5 mb-2.5">
-              {firstnameErr}
-            </p>
-          )}
 
           <input
             onChange={handleLastName}
             className="w-full border border-solid border-bordercolor px-2.5 py-2.5 rounded-md mt-4"
             type="text"
             placeholder="Last Name"
+            value={lastname}
           />
-          {lastnameErr && (
-            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5 mb-2.5">
-              {lastnameErr}
-            </p>
-          )}
 
           <input
             onChange={handleEmail}
             className="w-full border border-solid border-bordercolor px-2.5 py-2.5 rounded-md mt-4"
             type="email"
             placeholder="Email address or phone number"
+            value={email}
           />
-          {emailErr && (
-            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5 ">
-              {emailErr}
-            </p>
-          )}
 
           <div className="relative">
             <input
@@ -191,6 +134,7 @@ const Registration = () => {
               className="w-full border border-solid border-bordercolor px-2.5 py-2.5 mt-4 rounded-md"
               type={passwordShow ? "text" : "password"}
               placeholder="Password"
+              value={password}
             />
             {passwordShow ? (
               <RiEyeFill
@@ -204,12 +148,6 @@ const Registration = () => {
               />
             )}
           </div>
-
-          {passwordErr && (
-            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5">
-              {passwordErr}
-            </p>
-          )}
 
           <p className="font-pop font-regular text-base mt-3 mb-3">
             Date of birth:
@@ -272,12 +210,6 @@ const Registration = () => {
             </div>
           </div>
 
-          {dateofbirthErr && (
-            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5">
-              {dateofbirthErr}
-            </p>
-          )}
-
           <p className="font-pop font-regular text-base mt-3 mb-3">Gender:</p>
           <div className="flex gap-x-5 mb-5 relative">
             <div className="px-4 py-2.5 relative w-[150px] border border-solid border-[#D9D9D9] rounded-md">
@@ -286,8 +218,9 @@ const Registration = () => {
                 <input
                   type="radio"
                   name="gender"
+                  value={gender}
                   className="absolute top-4 right-3.5"
-                  onChange={handleMale}
+                  onChange={() => handleGender("male")}
                 />
               </div>
             </div>
@@ -298,8 +231,9 @@ const Registration = () => {
                 <input
                   type="radio"
                   name="gender"
+                  value={gender}
                   className="absolute top-4 right-3.5"
-                  onChange={handleFemale}
+                  onChange={() => handleGender("female")}
                 />
               </div>
             </div>
@@ -309,25 +243,30 @@ const Registration = () => {
                 <input
                   type="radio"
                   name="gender"
+                  value={gender}
                   className="absolute top-4 right-3.5"
-                  onChange={handleCustom}
+                  onChange={() => handleGender("custom")}
                 />
               </div>
             </div>
           </div>
 
-          {genderErr && (
-            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5">
-              {genderErr}
-            </p>
-          )}
-
           <button
-            onClick={handleLogin}
+            onClick={handleRegister}
             className="w-full bg-primary py-4 text-white font-pop font-bold text-lg	 mt-4 rounded-md"
           >
             Sign Up
           </button>
+          {err && (
+            <p className="border border-solid bg-rose-500 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5 ">
+              {err}
+            </p>
+          )}
+          {success && (
+            <p className="border border-solid bg-emerald-600	 px-2.5 py-2.5 rounded-md text-white font-pop font-regular mt-2.5 ">
+              {success}
+            </p>
+          )}
           <Link
             to="/"
             className="font-pop font-medium text-base 	text-center text-primary mt-2 underline block border-b boder-solid-2px pb-8 mb-4"
