@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
     const check = await User.findOne({ email });
 
     if (check) {
-      res.status(400).json({
+      return res.status(400).json({
         message:
           "Already email is exist, Please try different email address to continue",
       });
@@ -40,19 +40,19 @@ exports.register = async (req, res) => {
     if (!validateLength(first_name, 3, 30)) {
       return res
         .status(400)
-        .json({ messagae: "First name must be between 3 and 30 character" });
+        .json({ message: "First name must be between 3 and 30 character" });
     }
 
     if (!validateLength(last_name, 3, 30)) {
       return res
         .status(400)
-        .json({ messagae: "Last name must be between 3 and 30 character" });
+        .json({ message: "Last name must be between 3 and 30 character" });
     }
 
-    if (!validateLength(password, 3, 30)) {
+    if (!validateLength(password, 6, 30)) {
       return res
         .status(400)
-        .json({ messagae: "Password must be atleast 6 character" });
+        .json({ message: "Password must be atleast 6 character" });
     }
 
     // password cryption
@@ -82,7 +82,7 @@ exports.register = async (req, res) => {
     const token = generateToken({ id: user._id.toString() }, "7d");
     console.log(token);
 
-    res.send({
+    return res.send({
       id: user._id,
       username: user.username,
       first_name: user.first_name,
@@ -92,7 +92,7 @@ exports.register = async (req, res) => {
       message: "Regiter Success! Activate your email to start",
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
